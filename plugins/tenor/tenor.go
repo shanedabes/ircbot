@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"math/rand"
 	"net/url"
+	"os"
 
 	"github.com/go-chat-bot/bot"
 	"github.com/go-chat-bot/plugins/web"
@@ -33,7 +34,7 @@ type tenor_json struct {
 }
 
 func tenor(command *bot.Cmd) (msg string, err error) {
-	api_key := "UTX9QGBLPC26"
+	api_key := os.Getenv("IRC_TENOR_API")
 	data := &tenor_json{}
 	msg = url.QueryEscape(command.RawArgs)
 

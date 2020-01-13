@@ -20,3 +20,4 @@ services:
       IRC_USER: gowon
       IRC_NICK: gowon
       IRC_TLS_SERVER_NAME: na
+      IRC_TENOR_API: "${IRC_TENOR_API}"
