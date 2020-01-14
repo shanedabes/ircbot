@@ -4,7 +4,7 @@ import (
 	"testing"
 )
 
-func Test_Colour(t *testing.T) {
+func TestColour(t *testing.T) {
 	cases := []struct {
 		f        FormattedText
 		expected string
