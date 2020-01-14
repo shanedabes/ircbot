@@ -44,3 +44,11 @@ func (f FormattedText) String() string {
 
 	return fmt.Sprintf("\x03%s,%s%s\x0399,99", f.Fg, f.Bg, f.Text)
 }
+
+func ColouriseList(strs []string) (out []FormattedText) {
+	for n, s := range strs {
+		c := Colour(fmt.Sprintf("%02d", n%13+2))
+		out = append(out, FormattedText{Text: s, Fg: c})
+	}
+	return out
+}
