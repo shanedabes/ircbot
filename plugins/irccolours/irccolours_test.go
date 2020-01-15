@@ -65,3 +65,17 @@ func TestColouriseList(t *testing.T) {
 		}
 	})
 }
+
+func TestFormattedTextToStringList(t *testing.T) {
+	fs := []FormattedText{
+		FormattedText{Text: "test"},
+		FormattedText{Text: "test2"},
+	}
+	got := FormattedTextToStringList(fs)
+
+	for n, f := range fs {
+		if f.String() != got[n] {
+			t.Errorf("got %s, expected %s", f.String(), got[n])
+		}
+	}
+}

@@ -52,3 +52,10 @@ func ColouriseList(strs []string) (out []FormattedText) {
 	}
 	return out
 }
+
+func FormattedTextToStringList(fs []FormattedText) (out []string) {
+	for _, f := range fs {
+		out = append(out, f.String())
+	}
+	return
+}
