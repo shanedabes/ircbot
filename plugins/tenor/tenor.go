@@ -9,7 +9,7 @@ import (
 	"github.com/go-chat-bot/bot"
 	"github.com/go-chat-bot/plugins/web"
 
-	"github.com/shanedabes/ircbot/plugins/colours"
+	"github.com/shanedabes/ircbot/plugins/irccolours"
 )
 
 const (
@@ -45,9 +45,9 @@ func tenor(command *bot.Cmd) (msg string, err error) {
 	}
 
 	if len(data.Results) == 0 {
-		out := colours.FormattedText{
+		out := irccolours.FormattedText{
 			Text: fmt.Sprintf("No %s gifs found.", msg),
-			Fg:   colours.Red,
+			Fg:   irccolours.Red,
 		}
 		return out.String(), nil
 	}
