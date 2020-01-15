@@ -6,6 +6,7 @@ import (
 	"github.com/go-chat-bot/bot/irc"
 
 	_ "github.com/go-chat-bot/plugins/url"
+	_ "github.com/shanedabes/ircbot/plugins/checkiday"
 	_ "github.com/shanedabes/ircbot/plugins/lastfm"
 	_ "github.com/shanedabes/ircbot/plugins/tenor"
 

@@ -1,7 +1,7 @@
 package formatting
 
 import (
-	"reflect"
+	"strings"
 	"testing"
 )
 
@@ -15,14 +15,14 @@ func TestListToLines(t *testing.T) {
 	}
 
 	got := ListToLines(lines, 20)
-	expected := []string{
+	expected := strings.Join([]string{
 		"test line",
 		"another test line",
 		"test, test",
 		"a longer test line",
-	}
+	}, "\n")
 
-	if !reflect.DeepEqual(got, expected) {
+	if got != expected {
 		t.Errorf("got %q, want %q", got, expected)
 	}
 }
