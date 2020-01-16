@@ -16,6 +16,8 @@ const (
 	tenor_api_url_base = "https://api.tenor.com/v1/search"
 )
 
+var api_key = os.Getenv("IRC_TENOR_API")
+
 func search_url(term string, api_key string) (url string) {
 	temp := "%s?q=%s&key=%s&limit=10"
 
@@ -34,7 +36,6 @@ type tenor_json struct {
 }
 
 func tenor(command *bot.Cmd) (msg string, err error) {
-	api_key := os.Getenv("IRC_TENOR_API")
 	data := &tenor_json{}
 	msg = url.QueryEscape(command.RawArgs)
 

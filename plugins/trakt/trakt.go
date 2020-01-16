@@ -13,6 +13,8 @@ const (
 	trakt_api_url = "https://api.trakt.tv/users/%s/history"
 )
 
+var api_key = os.Getenv("IRC_TRAKT_API")
+
 type traktJson []Entry
 
 func (tj traktJson) Latest() string {
@@ -66,7 +68,6 @@ func (m Movie) String() string {
 }
 
 func trakt(command *bot.Cmd) (msg string, err error) {
-	api_key := os.Getenv("IRC_TRAKT_API")
 	args := url.QueryEscape(command.RawArgs)
 	url := fmt.Sprintf(trakt_api_url, args)
 
