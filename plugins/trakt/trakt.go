@@ -70,19 +70,19 @@ func trakt(command *bot.Cmd) (msg string, err error) {
 	args := url.QueryEscape(command.RawArgs)
 	url := fmt.Sprintf(trakt_api_url, args)
 
-	data := &traktJson{}
+	j := &traktJson{}
 	headers := map[string]string{
 		"Content-Type":      "application/json",
 		"trakt-api-version": "2",
 		"trakt-api-key":     api_key,
 	}
-	err = web.GetJSONWithHeaders(url, headers, data)
+	err = web.GetJSONWithHeaders(url, headers, j)
 
 	if err != nil {
 		return "", err
 	}
 
-	out := fmt.Sprintf("%s last watched: %s", args, data.Latest())
+	out := fmt.Sprintf("%s last watched: %s", args, j.Latest())
 
 	return out, nil
 }
