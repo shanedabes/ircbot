@@ -35,11 +35,11 @@ func TestLastfmJsonString(t *testing.T) {
 	}{
 		{
 			fmt.Sprintf(jf, "true"),
-			"♫  user is listening to artist - track (album) ♫",
+			"♫ user is listening to artist - track (album) ♫",
 		},
 		{
 			fmt.Sprintf(jf, ""),
-			"♫  user last listened to artist - track (album) ♫",
+			"♫ user last listened to artist - track (album) ♫",
 		},
 	}
 
