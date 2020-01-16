@@ -15,6 +15,8 @@ const (
 		"&user=%s&api_key=%s&format=json&limit=1"
 )
 
+var api_key = os.Getenv("IRC_LASTFM_API")
+
 type lastfmJson struct {
 	Recenttracks struct {
 		Attr struct {
@@ -54,7 +56,6 @@ func (l lastfmJson) String() string {
 }
 
 func lastfm(command *bot.Cmd) (msg string, err error) {
-	api_key := os.Getenv("IRC_LASTFM_API")
 	msg = url.QueryEscape(command.RawArgs)
 	url := fmt.Sprintf(lastfmRecentTracksApiURL, msg, api_key)
 
