@@ -10,7 +10,7 @@ import (
 
 func choose(command *bot.Cmd) (msg string, err error) {
 	args := command.RawArgs
-	words := strings.Split(args, " ")
+	words := strings.Split(args, "/")
 
 	rand.Seed(time.Now().Unix())
 	index := rand.Intn(len(words))
@@ -23,7 +23,7 @@ func init() {
 	bot.RegisterCommand(
 		"choose",
 		"Choose one from options",
-		"red yellow green",
+		"red lolly/yellow lolly/green lolly",
 		choose,
 	)
 }
