@@ -9,6 +9,7 @@ import (
 	_ "github.com/shanedabes/ircbot/plugins/checkiday"
 	_ "github.com/shanedabes/ircbot/plugins/lastfm"
 	_ "github.com/shanedabes/ircbot/plugins/tenor"
+	_ "github.com/shanedabes/ircbot/plugins/trakt"
 
 	"strings"
 )
