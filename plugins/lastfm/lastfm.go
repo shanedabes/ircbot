@@ -48,7 +48,7 @@ func (l lastfmJson) String() string {
 	}
 
 	return fmt.Sprintf(
-		"♫  %s %s %s - %s (%s) ♫",
+		"♫ %s %s %s - %s (%s) ♫",
 		user, action, artist, trackName, album,
 	)
 }
