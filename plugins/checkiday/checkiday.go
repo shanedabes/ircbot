@@ -9,16 +9,16 @@ import (
 )
 
 const (
-	checkiday_api_url = "https://checkiday.com/api/3/?d"
+	checkidayAPIURL = "https://checkiday.com/api/3/?d"
 )
 
-type daysJson struct {
+type daysJSON struct {
 	Holidays []struct {
 		Name string `json:"name"`
 	} `json:"holidays"`
 }
 
-func (dj daysJson) days() (out []string) {
+func (dj daysJSON) days() (out []string) {
 	for _, d := range dj.Holidays {
 		out = append(out, d.Name)
 	}
@@ -26,8 +26,8 @@ func (dj daysJson) days() (out []string) {
 }
 
 func checkiday(command *bot.Cmd) (msg string, err error) {
-	data := &daysJson{}
-	err = web.GetJSON(checkiday_api_url, data)
+	data := &daysJSON{}
+	err = web.GetJSON(checkidayAPIURL, data)
 
 	if err != nil {
 		return "", err

@@ -1,8 +1,9 @@
 package lastfm
 
 import (
-	"github.com/stretchr/testify/assert"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 var (
@@ -91,7 +92,7 @@ func TestAction(t *testing.T) {
 
 	for _, tc := range cases {
 		t.Run(tc.name, func(t *testing.T) {
-			got := tc.t.Action()
+			got := tc.t.action()
 
 			assert.Equal(t, got, tc.expected)
 		})

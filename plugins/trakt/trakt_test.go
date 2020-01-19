@@ -29,7 +29,7 @@ var (
 		Movie: m,
 	}
 
-	j = traktJson{ee, em}
+	j = traktJSON{ee, em}
 )
 
 func TestJson(t *testing.T) {
