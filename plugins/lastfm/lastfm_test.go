@@ -37,6 +37,10 @@ var (
 		User:   u,
 		Tracks: []Track{tr},
 	}
+
+	rtn = Recenttracks{
+		Tracks: []Track{},
+	}
 )
 
 func TestUser(t *testing.T) {
@@ -95,8 +99,28 @@ func TestAction(t *testing.T) {
 }
 
 func TestRecentTracks(t *testing.T) {
-	got := rt.String()
-	expected := " testuser last listened to testartist - testtrack (testalbum) "
+	cases := []struct {
+		name     string
+		r        Recenttracks
+		expected string
+	}{
+		{
+			name:     "Valid result",
+			r:        rt,
+			expected: " testuser last listened to testartist - testtrack (testalbum) ",
+		},
+		{
+			name:     "Invalid results",
+			r:        rtn,
+			expected: "No tracks found for user",
+		},
+	}
 
-	assert.Equal(t, got, expected)
+	for _, tc := range cases {
+		t.Run(tc.name, func(t *testing.T) {
+			got := tc.r.String()
+
+			assert.Equal(t, got, tc.expected)
+		})
+	}
 }

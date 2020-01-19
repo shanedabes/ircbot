@@ -31,6 +31,10 @@ type Recenttracks struct {
 }
 
 func (r Recenttracks) String() string {
+	if len(r.Tracks) == 0 {
+		return "No tracks found for user"
+	}
+
 	track := r.Tracks[0]
 
 	return fmt.Sprintf(" %s %s %s ", r.User, track.Action(), track)
@@ -87,14 +91,14 @@ func lastfm(command *bot.Cmd) (msg string, err error) {
 	msg = url.QueryEscape(command.RawArgs)
 	url := fmt.Sprintf(lastfmRecentTracksApiURL, msg, api_key)
 
-	data := &lastfmJson{}
-	err = web.GetJSON(url, data)
+	j := &lastfmJson{}
+	err = web.GetJSON(url, j)
 
 	if err != nil {
 		return "", err
 	}
 
-	return data.String(), nil
+	return j.String(), nil
 }
 
 func init() {
