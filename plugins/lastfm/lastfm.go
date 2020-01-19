@@ -18,41 +18,69 @@ const (
 var api_key = os.Getenv("IRC_LASTFM_API")
 
 type lastfmJson struct {
-	Recenttracks struct {
-		Attr struct {
-			User string `json:"user"`
-		} `json:"@attr"`
-		Track []struct {
-			Album struct {
-				Text string `json:"#text"`
-			} `json:"album"`
-			Attr struct {
-				NowPlaying string `json:"nowplaying"`
-			} `json:"@attr"`
-			Artist struct {
-				Text string `json:"#text"`
-			} `json:"artist"`
-			Name string `json:"name"`
-		} `json:"track"`
-	} `json:"recenttracks"`
+	Recenttracks Recenttracks `json:"recenttracks"`
 }
 
-func (l lastfmJson) String() string {
-	user := l.Recenttracks.Attr.User
-	track := l.Recenttracks.Track[0]
-	album := track.Album.Text
-	artist := track.Artist.Text
-	trackName := track.Name
+func (j lastfmJson) String() string {
+	return j.Recenttracks.String()
+}
 
-	action := "last listened to"
-	if track.Attr.NowPlaying == "true" {
-		action = "is listening to"
+type Recenttracks struct {
+	User   User    `json:"@attr"`
+	Tracks []Track `json:"track"`
+}
+
+func (r Recenttracks) String() string {
+	track := r.Tracks[0]
+
+	return fmt.Sprintf(" %s %s %s ", r.User, track.Action(), track)
+}
+
+type User struct {
+	User string `json:"user"`
+}
+
+func (u User) String() string {
+	return u.User
+}
+
+type Artist struct {
+	Name string `json:"#text"`
+}
+
+func (a Artist) String() string {
+	return a.Name
+}
+
+type TrackAttr struct {
+	Nowplaying string `json:"nowplaying"`
+}
+
+type Album struct {
+	Name string `json:"#text"`
+}
+
+func (a Album) String() string {
+	return a.Name
+}
+
+type Track struct {
+	Artist     Artist     `json:"artist"`
+	Nowplaying *TrackAttr `json:"@attr,omitempty"`
+	Album      Album      `json:"album"`
+	Name       string     `json:"name"`
+}
+
+func (t Track) String() string {
+	return fmt.Sprintf("%s - %s (%s)", t.Artist, t.Name, t.Album)
+}
+
+func (t Track) Action() string {
+	if t.Nowplaying == nil {
+		return "last listened to"
+	} else {
+		return "is listening to"
 	}
-
-	return fmt.Sprintf(
-		"♫ %s %s %s - %s (%s) ♫",
-		user, action, artist, trackName, album,
-	)
 }
 
 func lastfm(command *bot.Cmd) (msg string, err error) {

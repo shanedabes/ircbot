@@ -1,55 +1,102 @@
 package lastfm
 
 import (
-	"encoding/json"
-	"fmt"
+	"github.com/stretchr/testify/assert"
 	"testing"
 )
 
-func TestLastfmJsonString(t *testing.T) {
-	jf := `{
-		  "recenttracks": {
-			"@attr": {
-			  "user": "user"
-			},
-			"track": [
-			  {
-				"artist": {
-				  "#text": "artist"
-				},
-				"@attr": {
-				  "nowplaying": "%s"
-				},
-				"album": {
-				  "#text": "album"
-				},
-				"name": "track"
-			  }
-			]
-		  }
-		}`
+var (
+	u = User{
+		User: "testuser",
+	}
 
+	ar = Artist{
+		Name: "testartist",
+	}
+
+	al = Album{
+		Name: "testalbum",
+	}
+
+	tr = Track{
+		Artist: ar,
+		Album:  al,
+		Name:   "testtrack",
+	}
+
+	trp = Track{
+		Artist: ar,
+		Album:  al,
+		Name:   "testtrack",
+		Nowplaying: &TrackAttr{
+			Nowplaying: "blah",
+		},
+	}
+
+	rt = Recenttracks{
+		User:   u,
+		Tracks: []Track{tr},
+	}
+)
+
+func TestUser(t *testing.T) {
+	got := u.String()
+	expected := "testuser"
+
+	assert.Equal(t, got, expected)
+}
+
+func TestArtist(t *testing.T) {
+	got := ar.String()
+	expected := "testartist"
+
+	assert.Equal(t, got, expected)
+}
+
+func TestAlbum(t *testing.T) {
+	got := al.String()
+	expected := "testalbum"
+
+	assert.Equal(t, got, expected)
+}
+
+func TestTrack(t *testing.T) {
+	got := tr.String()
+	expected := "testartist - testtrack (testalbum)"
+
+	assert.Equal(t, got, expected)
+}
+
+func TestAction(t *testing.T) {
 	cases := []struct {
-		j        string
+		name     string
+		t        Track
 		expected string
 	}{
 		{
-			fmt.Sprintf(jf, "true"),
-			"♫ user is listening to artist - track (album) ♫",
+			name:     "Playing track",
+			t:        trp,
+			expected: "is listening to",
 		},
 		{
-			fmt.Sprintf(jf, ""),
-			"♫ user last listened to artist - track (album) ♫",
+			name:     "Not playing track",
+			t:        tr,
+			expected: "last listened to",
 		},
 	}
 
 	for _, tc := range cases {
-		data := &lastfmJson{}
-		_ = json.Unmarshal([]byte(tc.j), &data)
+		t.Run(tc.name, func(t *testing.T) {
+			got := tc.t.Action()
 
-		got := data.String()
-		if got != tc.expected {
-			t.Errorf("got %q, want %q", got, tc.expected)
-		}
+			assert.Equal(t, got, tc.expected)
+		})
 	}
+}
+
+func TestRecentTracks(t *testing.T) {
+	got := rt.String()
+	expected := " testuser last listened to testartist - testtrack (testalbum) "
+
+	assert.Equal(t, got, expected)
 }
