@@ -1,6 +1,7 @@
 package lastfm
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -44,32 +45,39 @@ var (
 	}
 )
 
-func TestUser(t *testing.T) {
-	got := u.String()
-	expected := "testuser"
+func TestString(t *testing.T) {
+	cases := []struct {
+		name     string
+		obj      fmt.Stringer
+		expected string
+	}{
+		{
+			name:     "User",
+			obj:      u,
+			expected: "testuser",
+		},
+		{
+			name:     "Artist",
+			obj:      ar,
+			expected: "testartist",
+		},
+		{
+			name:     "Album",
+			obj:      al,
+			expected: "testalbum",
+		},
+		{
+			name:     "Track",
+			obj:      tr,
+			expected: "testartist - testtrack (testalbum)",
+		},
+	}
 
-	assert.Equal(t, got, expected)
-}
-
-func TestArtist(t *testing.T) {
-	got := ar.String()
-	expected := "testartist"
-
-	assert.Equal(t, got, expected)
-}
-
-func TestAlbum(t *testing.T) {
-	got := al.String()
-	expected := "testalbum"
-
-	assert.Equal(t, got, expected)
-}
-
-func TestTrack(t *testing.T) {
-	got := tr.String()
-	expected := "testartist - testtrack (testalbum)"
-
-	assert.Equal(t, got, expected)
+	for _, tc := range cases {
+		t.Run(tc.name, func(t *testing.T) {
+			assert.Equal(t, tc.obj.String(), tc.expected)
+		})
+	}
 }
 
 func TestAction(t *testing.T) {

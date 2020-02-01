@@ -3,6 +3,8 @@ package irccolours
 import (
 	"fmt"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestColour(t *testing.T) {
@@ -30,11 +32,7 @@ func TestColour(t *testing.T) {
 
 	for _, tc := range cases {
 		t.Run(tc.name, func(t *testing.T) {
-			got := tc.f.String()
-
-			if got != tc.expected {
-				t.Errorf("got %q, want %q", got, tc.expected)
-			}
+			assert.Equal(t, tc.f.String(), tc.expected)
 		})
 	}
 }
@@ -48,21 +46,15 @@ func TestColouriseList(t *testing.T) {
 	got := ColouriseList(ss)
 
 	t.Run("14 elements", func(t *testing.T) {
-		if len(got) != 14 {
-			t.Errorf("expected 14 elements")
-		}
+		assert.Equal(t, len(got), 14, "Expected 14 lines")
 	})
 
 	t.Run("Colours looped", func(t *testing.T) {
 		for i := 0; i < 13; i++ {
-			if g := got[i]; g.Fg != Colour(fmt.Sprintf("%02d", i+2)) {
-				t.Errorf("got %s, expected %02d", g.Fg, i+2)
-			}
+			expected := Colour(fmt.Sprintf("%02d", i+2))
+			assert.Equal(t, got[i].Fg, expected)
 		}
-
-		if got[13].Fg != Colour("02") {
-			t.Errorf("got %s, expected 02", got[13].Fg)
-		}
+		assert.Equal(t, got[13].Fg, Colour("02"))
 	})
 }
 
@@ -74,8 +66,6 @@ func TestFormattedTextToStringList(t *testing.T) {
 	got := FormattedTextToStringList(fs)
 
 	for n, f := range fs {
-		if f.String() != got[n] {
-			t.Errorf("got %s, expected %s", f.String(), got[n])
-		}
+		assert.Equal(t, f.String(), got[n])
 	}
 }

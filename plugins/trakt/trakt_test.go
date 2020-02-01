@@ -1,6 +1,10 @@
 package trackt
 
-import "testing"
+import (
+	"testing"
+
+	"github.com/stretchr/testify/assert"
+)
 
 var (
 	e = Episode{
@@ -33,12 +37,7 @@ var (
 )
 
 func TestJson(t *testing.T) {
-	got := j.Latest()
-	expected := ee.String()
-
-	if got != expected {
-		t.Errorf("got %q, want %q", got, expected)
-	}
+	assert.Equal(t, j.Latest(), ee.String())
 }
 
 func TestEntry(t *testing.T) {
@@ -61,38 +60,22 @@ func TestEntry(t *testing.T) {
 
 	for _, tc := range cases {
 		t.Run(tc.name, func(t *testing.T) {
-			got := tc.e.String()
-
-			if got != tc.expected {
-				t.Errorf("got %q, want %q", got, tc.expected)
-			}
+			assert.Equal(t, tc.e.String(), tc.expected)
 		})
 	}
 }
 
 func TestEpisode(t *testing.T) {
-	got := e.String()
 	expected := "01x02 - test ep"
-
-	if got != expected {
-		t.Errorf("got %q, want %q", got, expected)
-	}
+	assert.Equal(t, e.String(), expected)
 }
 
 func TestShow(t *testing.T) {
-	got := s.String()
 	expected := "test show"
-
-	if got != expected {
-		t.Errorf("got %q, want %q", got, expected)
-	}
+	assert.Equal(t, s.String(), expected)
 }
 
 func TestMovie(t *testing.T) {
-	got := m.String()
 	expected := "test movie (2020)"
-
-	if got != expected {
-		t.Errorf("got %q, want %q", got, expected)
-	}
+	assert.Equal(t, m.String(), expected)
 }
