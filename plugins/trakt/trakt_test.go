@@ -1,6 +1,7 @@
 package trackt
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -40,42 +41,42 @@ func TestJson(t *testing.T) {
 	assert.Equal(t, j.Latest(), ee.String())
 }
 
-func TestEntry(t *testing.T) {
+func TestString(t *testing.T) {
 	cases := []struct {
 		name     string
-		e        Entry
+		obj      fmt.Stringer
 		expected string
 	}{
 		{
-			name:     "episode entry",
-			e:        ee,
+			name:     "Episode entry",
+			obj:      ee,
 			expected: "test show 01x02 - test ep",
 		},
 		{
-			name:     "movie entry",
-			e:        em,
+			name:     "Movie entry",
+			obj:      em,
+			expected: "test movie (2020)",
+		},
+		{
+			name:     "Episode",
+			obj:      e,
+			expected: "01x02 - test ep",
+		},
+		{
+			name:     "Show",
+			obj:      s,
+			expected: "test show",
+		},
+		{
+			name:     "Movie",
+			obj:      m,
 			expected: "test movie (2020)",
 		},
 	}
 
 	for _, tc := range cases {
 		t.Run(tc.name, func(t *testing.T) {
-			assert.Equal(t, tc.e.String(), tc.expected)
+			assert.Equal(t, tc.obj.String(), tc.expected)
 		})
 	}
-}
-
-func TestEpisode(t *testing.T) {
-	expected := "01x02 - test ep"
-	assert.Equal(t, e.String(), expected)
-}
-
-func TestShow(t *testing.T) {
-	expected := "test show"
-	assert.Equal(t, s.String(), expected)
-}
-
-func TestMovie(t *testing.T) {
-	expected := "test movie (2020)"
-	assert.Equal(t, m.String(), expected)
 }
