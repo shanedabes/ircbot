@@ -12,6 +12,7 @@ import (
 	_ "github.com/shanedabes/ircbot/plugins/lastfm"
 	_ "github.com/shanedabes/ircbot/plugins/tenor"
 	_ "github.com/shanedabes/ircbot/plugins/trakt"
+	_ "github.com/shanedabes/ircbot/plugins/twitter"
 
 	"strings"
 )
