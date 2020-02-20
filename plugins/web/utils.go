@@ -28,6 +28,7 @@ func getBodyWithHeaders(url string, headers map[string]string) ([]byte, error) {
 	return ioutil.ReadAll(resp.Body)
 }
 
+// GetJSONWithHeaders is a helper function to return a json object from a json rest api endpoint
 func GetJSONWithHeaders(url string, headers map[string]string, v interface{}) error {
 	body, err := getBodyWithHeaders(url, headers)
 	if err != nil {

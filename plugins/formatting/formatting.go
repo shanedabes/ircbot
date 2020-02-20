@@ -4,6 +4,7 @@ import (
 	"fmt"
 )
 
+// ListToLines converts a list of strings to a newline separated string, without breaking entries across lines
 func ListToLines(list []string, lineLength int) (lines string) {
 	line := ""
 	for _, i := range list {

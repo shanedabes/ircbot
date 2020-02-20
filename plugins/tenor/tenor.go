@@ -13,16 +13,18 @@ import (
 )
 
 const (
-	tenor_api_url_base = "https://api.tenor.com/v1/search"
+	tenorAPIURLbase = "https://api.tenor.com/v1/search"
 )
 
-func search_url(term string, api_key string) (url string) {
+var apiKey = os.Getenv("IRC_TENOR_API")
+
+func searchURL(term string, apiKey string) (url string) {
 	temp := "%s?q=%s&key=%s&limit=10"
 
-	return fmt.Sprintf(temp, tenor_api_url_base, term, api_key)
+	return fmt.Sprintf(temp, tenorAPIURLbase, term, apiKey)
 }
 
-type tenor_json struct {
+type tenorJSON struct {
 	Results []struct {
 		Media []struct {
 			Gif struct {
@@ -34,11 +36,10 @@ type tenor_json struct {
 }
 
 func tenor(command *bot.Cmd) (msg string, err error) {
-	api_key := os.Getenv("IRC_TENOR_API")
-	data := &tenor_json{}
+	data := &tenorJSON{}
 	msg = url.QueryEscape(command.RawArgs)
 
-	err = web.GetJSON(search_url(msg, api_key), data)
+	err = web.GetJSON(searchURL(msg, apiKey), data)
 
 	if err != nil {
 		return "", err

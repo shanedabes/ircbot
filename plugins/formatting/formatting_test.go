@@ -3,6 +3,8 @@ package formatting
 import (
 	"strings"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestListToLines(t *testing.T) {
@@ -22,7 +24,5 @@ func TestListToLines(t *testing.T) {
 		"a longer test line",
 	}, "\n")
 
-	if got != expected {
-		t.Errorf("got %q, want %q", got, expected)
-	}
+	assert.Equal(t, got, expected)
 }

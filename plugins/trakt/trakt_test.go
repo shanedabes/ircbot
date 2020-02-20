@@ -1,6 +1,11 @@
 package trackt
 
-import "testing"
+import (
+	"fmt"
+	"testing"
+
+	"github.com/stretchr/testify/assert"
+)
 
 var (
 	e = Episode{
@@ -29,70 +34,49 @@ var (
 		Movie: m,
 	}
 
-	j = traktJson{ee, em}
+	j = traktJSON{ee, em}
 )
 
 func TestJson(t *testing.T) {
-	got := j.Latest()
-	expected := ee.String()
-
-	if got != expected {
-		t.Errorf("got %q, want %q", got, expected)
-	}
+	assert.Equal(t, j.Latest(), ee.String())
 }
 
-func TestEntry(t *testing.T) {
+func TestString(t *testing.T) {
 	cases := []struct {
 		name     string
-		e        Entry
+		obj      fmt.Stringer
 		expected string
 	}{
 		{
-			name:     "episode entry",
-			e:        ee,
+			name:     "Episode entry",
+			obj:      ee,
 			expected: "test show 01x02 - test ep",
 		},
 		{
-			name:     "movie entry",
-			e:        em,
+			name:     "Movie entry",
+			obj:      em,
+			expected: "test movie (2020)",
+		},
+		{
+			name:     "Episode",
+			obj:      e,
+			expected: "01x02 - test ep",
+		},
+		{
+			name:     "Show",
+			obj:      s,
+			expected: "test show",
+		},
+		{
+			name:     "Movie",
+			obj:      m,
 			expected: "test movie (2020)",
 		},
 	}
 
 	for _, tc := range cases {
 		t.Run(tc.name, func(t *testing.T) {
-			got := tc.e.String()
-
-			if got != tc.expected {
-				t.Errorf("got %q, want %q", got, tc.expected)
-			}
+			assert.Equal(t, tc.obj.String(), tc.expected)
 		})
-	}
-}
-
-func TestEpisode(t *testing.T) {
-	got := e.String()
-	expected := "01x02 - test ep"
-
-	if got != expected {
-		t.Errorf("got %q, want %q", got, expected)
-	}
-}
-
-func TestShow(t *testing.T) {
-	got := s.String()
-	expected := "test show"
-
-	if got != expected {
-		t.Errorf("got %q, want %q", got, expected)
-	}
-}
-
-func TestMovie(t *testing.T) {
-	got := m.String()
-	expected := "test movie (2020)"
-
-	if got != expected {
-		t.Errorf("got %q, want %q", got, expected)
 	}
 }

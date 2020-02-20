@@ -10,15 +10,18 @@ import (
 )
 
 const (
-	trakt_api_url = "https://api.trakt.tv/users/%s/history"
+	traktAPIURL = "https://api.trakt.tv/users/%s/history"
 )
 
-type traktJson []Entry
+var apiKey = os.Getenv("IRC_TRAKT_API")
 
-func (tj traktJson) Latest() string {
+type traktJSON []Entry
+
+func (tj traktJSON) Latest() string {
 	return tj[0].String()
 }
 
+// Entry represents a single entry, film or episode, in the trakt json
 type Entry struct {
 	Type    string  `json:"type"`
 	Episode Episode `json:"episode,omitempty"`
@@ -38,6 +41,7 @@ func (e Entry) String() string {
 	return "unknown"
 }
 
+// Episode represents a single episode in the trakt json
 type Episode struct {
 	Season int    `json:"season"`
 	Number int    `json:"number"`
@@ -48,6 +52,7 @@ func (e Episode) String() string {
 	return fmt.Sprintf("%02dx%02d - %s", e.Season, e.Number, e.Title)
 }
 
+// Show contains the parent show information for the returned episode
 type Show struct {
 	Title string `json:"title"`
 }
@@ -56,6 +61,7 @@ func (s Show) String() string {
 	return s.Title
 }
 
+// Movie represents a single movie in the trakt json
 type Movie struct {
 	Title string `json:"title"`
 	Year  int    `json:"year"`
@@ -66,15 +72,14 @@ func (m Movie) String() string {
 }
 
 func trakt(command *bot.Cmd) (msg string, err error) {
-	api_key := os.Getenv("IRC_TRAKT_API")
 	args := url.QueryEscape(command.RawArgs)
-	url := fmt.Sprintf(trakt_api_url, args)
+	url := fmt.Sprintf(traktAPIURL, args)
 
-	j := &traktJson{}
+	j := &traktJSON{}
 	headers := map[string]string{
 		"Content-Type":      "application/json",
 		"trakt-api-version": "2",
-		"trakt-api-key":     api_key,
+		"trakt-api-key":     apiKey,
 	}
 	err = web.GetJSONWithHeaders(url, headers, j)
 

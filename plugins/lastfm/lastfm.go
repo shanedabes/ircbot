@@ -10,62 +10,100 @@ import (
 )
 
 const (
-	lastfmRecentTracksApiURL = "https://ws.audioscrobbler.com/2.0" +
+	lastfmRecentTracksAPIURL = "https://ws.audioscrobbler.com/2.0" +
 		"?method=user.getrecenttracks" +
 		"&user=%s&api_key=%s&format=json&limit=1"
 )
 
-type lastfmJson struct {
-	Recenttracks struct {
-		Attr struct {
-			User string `json:"user"`
-		} `json:"@attr"`
-		Track []struct {
-			Album struct {
-				Text string `json:"#text"`
-			} `json:"album"`
-			Attr struct {
-				NowPlaying string `json:"nowplaying"`
-			} `json:"@attr"`
-			Artist struct {
-				Text string `json:"#text"`
-			} `json:"artist"`
-			Name string `json:"name"`
-		} `json:"track"`
-	} `json:"recenttracks"`
+var apiKey = os.Getenv("IRC_LASTFM_API")
+
+type lastfmJSON struct {
+	Recenttracks Recenttracks `json:"recenttracks"`
 }
 
-func (l lastfmJson) String() string {
-	user := l.Recenttracks.Attr.User
-	track := l.Recenttracks.Track[0]
-	album := track.Album.Text
-	artist := track.Artist.Text
-	trackName := track.Name
+func (j lastfmJSON) String() string {
+	return j.Recenttracks.String()
+}
 
-	action := "last listened to"
-	if track.Attr.NowPlaying == "true" {
-		action = "is listening to"
+// Recenttracks represents the metadata returned in the lastfm json
+type Recenttracks struct {
+	User   User    `json:"@attr"`
+	Tracks []Track `json:"track"`
+}
+
+func (r Recenttracks) String() string {
+	if len(r.Tracks) == 0 {
+		return "No tracks found for user"
 	}
 
-	return fmt.Sprintf(
-		"♫ %s %s %s - %s (%s) ♫",
-		user, action, artist, trackName, album,
-	)
+	track := r.Tracks[0]
+
+	return fmt.Sprintf(" %s %s %s ", r.User, track.action(), track)
+}
+
+// User represents the user information returned in the lastfm json
+type User struct {
+	User string `json:"user"`
+}
+
+func (u User) String() string {
+	return u.User
+}
+
+// Artist represents the artist information returned in the lastfm json
+type Artist struct {
+	Name string `json:"#text"`
+}
+
+func (a Artist) String() string {
+	return a.Name
+}
+
+// TrackAttr contains the track metadata, with now playing information
+type TrackAttr struct {
+	Nowplaying string `json:"nowplaying"`
+}
+
+// Album represents the album information returned in the lastfm json
+type Album struct {
+	Name string `json:"#text"`
+}
+
+func (a Album) String() string {
+	return a.Name
+}
+
+// Track represents the track information returned in the lastfm json
+type Track struct {
+	Artist     Artist     `json:"artist"`
+	Nowplaying *TrackAttr `json:"@attr,omitempty"`
+	Album      Album      `json:"album"`
+	Name       string     `json:"name"`
+}
+
+func (t Track) String() string {
+	return fmt.Sprintf("%s - %s (%s)", t.Artist, t.Name, t.Album)
+}
+
+func (t Track) action() string {
+	if t.Nowplaying == nil {
+		return "last listened to"
+	}
+	return "is listening to"
 }
 
 func lastfm(command *bot.Cmd) (msg string, err error) {
-	api_key := os.Getenv("IRC_LASTFM_API")
 	msg = url.QueryEscape(command.RawArgs)
-	url := fmt.Sprintf(lastfmRecentTracksApiURL, msg, api_key)
+	url := fmt.Sprintf(lastfmRecentTracksAPIURL, msg, apiKey)
 
-	data := &lastfmJson{}
-	err = web.GetJSON(url, data)
+	j := &lastfmJSON{}
+	err = web.GetJSON(url, j)
 
 	if err != nil {
 		return "", err
 	}
 
-	return data.String(), nil
+	return j.String(), nil
 }
 
 func init() {

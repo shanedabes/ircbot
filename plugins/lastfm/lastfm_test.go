@@ -1,55 +1,118 @@
 package lastfm
 
 import (
-	"encoding/json"
 	"fmt"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
-func TestLastfmJsonString(t *testing.T) {
-	jf := `{
-		  "recenttracks": {
-			"@attr": {
-			  "user": "user"
-			},
-			"track": [
-			  {
-				"artist": {
-				  "#text": "artist"
-				},
-				"@attr": {
-				  "nowplaying": "%s"
-				},
-				"album": {
-				  "#text": "album"
-				},
-				"name": "track"
-			  }
-			]
-		  }
-		}`
+var (
+	u = User{
+		User: "testuser",
+	}
 
+	ar = Artist{
+		Name: "testartist",
+	}
+
+	al = Album{
+		Name: "testalbum",
+	}
+
+	tr = Track{
+		Artist: ar,
+		Album:  al,
+		Name:   "testtrack",
+	}
+
+	trp = Track{
+		Artist: ar,
+		Album:  al,
+		Name:   "testtrack",
+		Nowplaying: &TrackAttr{
+			Nowplaying: "blah",
+		},
+	}
+
+	rt = Recenttracks{
+		User:   u,
+		Tracks: []Track{tr},
+	}
+
+	rtn = Recenttracks{
+		Tracks: []Track{},
+	}
+)
+
+func TestString(t *testing.T) {
 	cases := []struct {
-		j        string
+		name     string
+		obj      fmt.Stringer
 		expected string
 	}{
 		{
-			fmt.Sprintf(jf, "true"),
-			"♫ user is listening to artist - track (album) ♫",
+			name:     "User",
+			obj:      u,
+			expected: "testuser",
 		},
 		{
-			fmt.Sprintf(jf, ""),
-			"♫ user last listened to artist - track (album) ♫",
+			name:     "Artist",
+			obj:      ar,
+			expected: "testartist",
+		},
+		{
+			name:     "Album",
+			obj:      al,
+			expected: "testalbum",
+		},
+		{
+			name:     "Track",
+			obj:      tr,
+			expected: "testartist - testtrack (testalbum)",
+		},
+		{
+			name:     "Valid result",
+			obj:      rt,
+			expected: " testuser last listened to testartist - testtrack (testalbum) ",
+		},
+		{
+			name:     "Invalid results",
+			obj:      rtn,
+			expected: "No tracks found for user",
 		},
 	}
 
 	for _, tc := range cases {
-		data := &lastfmJson{}
-		_ = json.Unmarshal([]byte(tc.j), &data)
+		t.Run(tc.name, func(t *testing.T) {
+			assert.Equal(t, tc.obj.String(), tc.expected)
+		})
+	}
+}
 
-		got := data.String()
-		if got != tc.expected {
-			t.Errorf("got %q, want %q", got, tc.expected)
-		}
+func TestAction(t *testing.T) {
+	cases := []struct {
+		name     string
+		t        Track
+		expected string
+	}{
+		{
+			name:     "Playing track",
+			t:        trp,
+			expected: "is listening to",
+		},
+		{
+			name:     "Not playing track",
+			t:        tr,
+			expected: "last listened to",
+		},
+	}
+
+	for _, tc := range cases {
+		t.Run(tc.name, func(t *testing.T) {
+			got := tc.t.action()
+
+			assert.Equal(t, got, tc.expected)
+		})
 	}
 }
