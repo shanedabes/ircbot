@@ -13,15 +13,21 @@ env:
   IMAGE_NAME: shanedabes/ircbot
 
 jobs:
-  build:
+  test:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout
         uses: actions/checkout@v1
 
-  push:
-    needs: build
+      - name: Lint
+        uses: docker://mushus/golangci-linter:1.1.2
+
+      - name: Test
+        uses: shoukoo/golang-pipeline/go1.13/test@master
+
+  docker:
+    needs: test
 
     runs-on: ubuntu-latest
     if: github.event_name == 'push'
