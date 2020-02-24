@@ -1,3 +1,7 @@
+## 1.4.0
+
+- Add jokes plugin
+
 ## 1.3.0
 
 - Add random fact plugin
