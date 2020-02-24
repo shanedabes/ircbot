@@ -6,8 +6,6 @@ on:
 
   push:
     branches: master
-
-  tag:
     tags:
       - '*'
 
@@ -73,7 +71,7 @@ jobs:
     needs: test
 
     runs-on: ubuntu-latest
-    if: github.event_name == 'tag'
+    if: github.event_name == 'push'
 
     steps:
       - name: Checkout
