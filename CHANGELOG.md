@@ -1,3 +1,7 @@
+## 1.3.0
+
+- Add random fact plugin
+
 ## 1.2.0
 
 - Add quote of the day plugin
