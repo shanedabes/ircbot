@@ -11,6 +11,7 @@ import (
 	_ "github.com/shanedabes/ircbot/plugins/clock"
 	_ "github.com/shanedabes/ircbot/plugins/donger"
 	_ "github.com/shanedabes/ircbot/plugins/lastfm"
+	_ "github.com/shanedabes/ircbot/plugins/qod"
 	_ "github.com/shanedabes/ircbot/plugins/qwantz"
 	_ "github.com/shanedabes/ircbot/plugins/tenor"
 	_ "github.com/shanedabes/ircbot/plugins/trakt"
