@@ -1,3 +1,7 @@
+## 1.5.0
+
+- Add word of the day plugin
+
 ## 1.4.0
 
 - Add jokes plugin
