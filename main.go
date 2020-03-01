@@ -19,6 +19,7 @@ import (
 	_ "github.com/shanedabes/ircbot/plugins/trakt"
 	_ "github.com/shanedabes/ircbot/plugins/twitter"
 	_ "github.com/shanedabes/ircbot/plugins/wikipedia"
+	_ "github.com/shanedabes/ircbot/plugins/wordnik"
 
 	"strings"
 )
