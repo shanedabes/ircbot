@@ -9,6 +9,10 @@ on:
     tags:
       - '*'
 
+  release:
+    types:
+      - created
+
 env:
   IMAGE_NAME: shanedabes/ircbot
 
@@ -71,7 +75,7 @@ jobs:
     needs: test
 
     runs-on: ubuntu-latest
-    if: github.event_name == 'push'
+    if: github.event_name == 'release'
 
     steps:
       - name: Checkout
