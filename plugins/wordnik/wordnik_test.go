@@ -10,16 +10,16 @@ import (
 var (
 	j = json{
 		Word:        "test",
-		Definitions: []definition{d1, d2},
-		Examples:    []example{e1, e2},
+		Definitions: []child{d1, d2},
+		Examples:    []child{e1, e2},
 		Note:        "test note",
 	}
 
-	d1 = definition{Text: "def1"}
-	d2 = definition{Text: "def2"}
+	d1 = child{Text: "def1"}
+	d2 = child{Text: "def2"}
 
-	e1 = example{Text: "ex1"}
-	e2 = example{Text: "ex2"}
+	e1 = child{Text: "ex1"}
+	e2 = child{Text: "ex2"}
 )
 
 func TestString(t *testing.T) {

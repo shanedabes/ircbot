@@ -20,10 +20,10 @@ var (
 )
 
 type json struct {
-	Word        string       `json:"word"`
-	Definitions []definition `json:"definitions"`
-	Examples    []example    `json:"examples"`
-	Note        string       `json:"note"`
+	Word        string  `json:"word"`
+	Definitions []child `json:"definitions"`
+	Examples    []child `json:"examples"`
+	Note        string  `json:"note"`
 }
 
 func (j json) Definition() string {
@@ -50,11 +50,7 @@ func (j json) String() (out string) {
 	}, "\n")
 }
 
-type definition struct {
-	Text string `json:"text"`
-}
-
-type example struct {
+type child struct {
 	Text string `json:"text"`
 }
 
