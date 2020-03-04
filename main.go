@@ -15,6 +15,7 @@ import (
 	_ "github.com/shanedabes/ircbot/plugins/lastfm"
 	_ "github.com/shanedabes/ircbot/plugins/qod"
 	_ "github.com/shanedabes/ircbot/plugins/qwantz"
+	_ "github.com/shanedabes/ircbot/plugins/talk"
 	_ "github.com/shanedabes/ircbot/plugins/tenor"
 	_ "github.com/shanedabes/ircbot/plugins/trakt"
 	_ "github.com/shanedabes/ircbot/plugins/twitter"
