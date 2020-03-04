@@ -1,3 +1,7 @@
+## 1.6.0
+
+- Add ai talk plugin
+
 ## 1.5.0
 
 - Add word of the day plugin
