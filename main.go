@@ -13,6 +13,7 @@ import (
 	_ "github.com/shanedabes/ircbot/plugins/fact"
 	_ "github.com/shanedabes/ircbot/plugins/jod"
 	_ "github.com/shanedabes/ircbot/plugins/lastfm"
+	_ "github.com/shanedabes/ircbot/plugins/pokedex"
 	_ "github.com/shanedabes/ircbot/plugins/qod"
 	_ "github.com/shanedabes/ircbot/plugins/qwantz"
 	_ "github.com/shanedabes/ircbot/plugins/talk"
