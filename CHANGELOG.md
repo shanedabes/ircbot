@@ -1,3 +1,7 @@
+## 1.7.0
+
+- Add pokedex plugin
+
 ## 1.6.0
 
 - Add ai talk plugin
